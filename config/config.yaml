@@ -1,0 +1,29 @@
+project:
+  name: assemble
+  level: -1
+applets:
+  appId: wxxxxx
+  secret: xxxx
+database:
+  host: 127.0.0.1
+  port: 15432
+  uname: root
+  password: x
+  dbname: assemble
+  open_count: 20 # 连接池最多同时打开的连接数 (服务器cpu核心数 * 2 + 服务器有效磁盘数)
+  idle_count: 10 # 连接池最大空闲连接数 (openCount/2)
+  life_time: 3 # 连接池连接最大存活时长
+  idle_time: 10 # 连接池最大空闲时长
+  slow_threshold: 600 # 慢日志时间记录（毫秒）
+redis:
+  host: 127.0.0.1
+  port: 16379
+  password: x
+  dbname: 0
+  max_idle: 20
+  idle_time_out: 240
+minio:
+  endpoint: 127.0.0.1
+  port: 19000
+  access_key_id: x
+  secret_access_key: x
