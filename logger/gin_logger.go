@@ -52,7 +52,7 @@ func ZapRecovery(stack bool) gin.HandlerFunc {
 				} else {
 					logger.Errorf("[Recovery from panic] error：%T", err)
 				}
-				c.AbortWithStatusJSON(http.StatusInternalServerError, rest.Rest{Code: http.StatusInternalServerError, Msg: "后台服务异常请联系矢安科技管理员"})
+				c.AbortWithStatusJSON(http.StatusInternalServerError, rest.Rest{Code: http.StatusInternalServerError, Msg: "后台服务异常请联系管理员"})
 			}
 		}()
 		c.Next()
