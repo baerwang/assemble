@@ -1,11 +1,9 @@
 package router
 
-import (
-	"assemble/pkg/api"
-)
+import "assemble/pkg/api"
 
 func init() {
 	Register(func(router Router) {
-		router.GET("/login", api.Login)
+		router.PUT("/api/v1/mobile", api.UpdateMobile)
 	})
 }

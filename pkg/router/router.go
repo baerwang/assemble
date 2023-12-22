@@ -1,10 +1,11 @@
 package router
 
 import (
-	"assemble/pkg/api"
+	"assemble/config"
 	"assemble/pkg/constant"
 	"assemble/pkg/dto"
 	"assemble/pkg/model/page"
+	"assemble/pkg/router/jwt"
 	"assemble/pkg/router/val"
 	"fmt"
 	"strconv"
@@ -27,25 +28,22 @@ func InitRouter() *gin.Engine {
 		_ = v.RegisterValidation("VaDate", val.Date)
 	}
 
-	e := router.Group("")
+	authMiddleware, err := jwt.NewAuthMiddleware(config.GetConfig().Jwt.Realm, config.GetConfig().Jwt.Secret)
+	if err != nil {
+		logger.Fatal("JWT Error ", err)
+	}
+
+	router.POST("/api/v1/login", authMiddleware.LoginHandler)
+	auth := router.Group("/api/v1/auth")
+	auth.GET("/logout", authMiddleware.LogoutHandler)
+	auth.GET("/refresh_token", authMiddleware.RefreshHandler)
+
+	e := router.Group("", authMiddleware.MiddlewareFunc())
 	for _, hook := range _hooks {
 		hook((*myRouter)(e))
 	}
 
 	return router
-}
-
-func checkStd() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		rsp, ok := api.Store[c.GetHeader("openid")]
-		if !ok {
-			rest.Failed(c, "当前用户没有登陆")
-			c.Abort()
-			return
-		}
-		c.Set("session", rsp)
-		c.Next()
-	}
 }
 
 func checkPageAndIndex(limit int) gin.HandlerFunc {

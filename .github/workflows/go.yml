@@ -1,0 +1,42 @@
+name: Go
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+jobs:
+  build:
+    name: ${{ matrix.os }} - Go ${{ matrix.go_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go_version:
+          - '1.21'
+        os:
+          - ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go_version }}
+      - run: go version
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Go Fmt
+        run: |
+          go fmt ./... && git status && [[ -z `git status -s` ]]
+      - name: Go Test
+        run: |
+          go test -v ./pkg/... -coverprofile=coverage.txt -covermode=atomic
+      - uses: codecov/codecov-action@v3

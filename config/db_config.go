@@ -16,6 +16,10 @@ var (
 	DB *gorm.DB
 )
 
+func DBInit(dbConfig DbConfig) {
+	DB = LoadDb(dbConfig)
+}
+
 func LoadDb(dbConfig DbConfig) *gorm.DB {
 	log := logger.DbNew()
 	log.SlowThreshold = time.Duration(dbConfig.SlowThreshold) * time.Millisecond

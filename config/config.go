@@ -43,6 +43,7 @@ type Config struct {
 	Redis    RedisConfig
 	Minio    MinioConfig
 	Applets  AppletsConfig
+	Jwt      JwtConfig
 }
 
 type Project struct {
@@ -84,11 +85,18 @@ type AppletsConfig struct {
 	Secret string `yaml:"secret"`
 }
 
+type JwtConfig struct {
+	Realm  string `yaml:"realm"`
+	Secret string `yaml:"secret"`
+}
+
 func (r *Config) SetConfig(config Config) {
 	r.Project = config.Project
 	r.Database = config.Database
 	r.Redis = config.Redis
 	r.Minio = config.Minio
+	r.Applets = config.Applets
+	r.Jwt = config.Jwt
 }
 
 func GetConfig() *Config {

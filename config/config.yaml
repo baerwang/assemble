@@ -27,3 +27,6 @@ minio:
   port: 19000
   access_key_id: x
   secret_access_key: x
+jwt:
+  realm: xx
+  secret_key: xx
